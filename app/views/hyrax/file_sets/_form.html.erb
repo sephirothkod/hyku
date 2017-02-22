@@ -1,0 +1,31 @@
+<%= simple_form_for [main_app, curation_concern], html: { multipart: true } do |f| %>
+  <div class="base-terms">
+    <% @form.primary_terms.each do |term| %>
+      <%= render_edit_field_partial(term, f: f) %>
+    <% end %>
+  </div>
+  <%= link_to t('hyrax.works.edit.additional_fields'),
+              '#extended-terms',
+              class: 'btn btn-default additional-fields',
+              data: { toggle: 'collapse' },
+              role: "button",
+              'aria-expanded'=> "false",
+              'aria-controls'=> "extended-terms" %>
+  <div id="extended-terms" class='collapse'>
+    <%= render 'form_media', f: f %>
+    <% @form.secondary_terms.each do |term| %>
+      <%= render_edit_field_partial(term, f: f) %>
+    <% end %>
+  </div>
+  <div class="row">
+    <div class="col-md-12 form-actions">
+      <%= f.submit(
+        (curation_concern.persisted? ? "Update Attached File" : %(Attach to #{parent.human_readable_type})),
+        class: 'btn btn-primary'
+      ) %>
+      <%= link_to 'Cancel', parent_path(parent), class: 'btn btn-link' %>
+    </div>
+  </div>
+  
+ 
+<% end %>
