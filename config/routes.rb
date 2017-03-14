@@ -64,5 +64,7 @@ Rails.application.routes.draw do
   get 'cdm/mappings/', to: 'cdm#mappings', as: 'cdm_mappings'
   post 'cdm/generate/', to: 'cdm#generate', as: 'cdm_generate'
   
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
 end

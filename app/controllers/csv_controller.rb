@@ -20,8 +20,8 @@ class CsvController < ApplicationController
 	def create
 		#byebug
 		csv = CSV.parse(File.read(params[:csv_import][:csv_file].path), headers: true, encoding: 'utf-8')
-		#CsvUploadJob.perform_later(params[:csv_import][:csv_file].path, params[:csv_import][:mvs], @current_user)
-		perform(params[:csv_import][:csv_file].path, params[:csv_import][:mvs], @current_user)
+		CsvUploadJob.perform_later(params[:csv_import][:csv_file].path, params[:csv_import][:mvs], @current_user)
+		#perform(params[:csv_import][:csv_file].path, params[:csv_import][:mvs], @current_user)
 		flash[:notice] = "csv successfully uploaded"
 		redirect_to "/csv/upload"
 	end
@@ -40,7 +40,7 @@ class CsvController < ApplicationController
 				@works << row
 				@files[@works.length] = []
 			elsif(type.include? "File")
-				row.delete("type")
+				row.delete("object_type")
 				@files[@works.length] << row
 			end
 		end
@@ -132,20 +132,10 @@ class CsvController < ApplicationController
 		
 		def create_files(work, index)
 		  file = FileSet.new
-		  accepted_terms = Hyrax::FileSetForm.required_fields + Hyrax::FileSetForm.secondary_terms
 			@files[index].each do |file_data|
 				url = file_data.delete('url')
 				title = file_data.delete('title')
-				final_file_data = {}
-				file_data.each do |key, att|
-					if(att.nil? || att.empty? || key.to_s.include?('object_type') || !accepted_terms.include?(key.to_sym))
-						next
-					elsif file.send(key).nil?
-					  final_file_data[key] = att
-					else
-						final_file_data[key] = att.split @mvs
-					end
-				end
+				final_file_data = create_data file_data, "Hyrax::FileSetForm", file
 				create_file_from_url(url, title, work, final_file_data)
 			end
 		end

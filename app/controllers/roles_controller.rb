@@ -17,7 +17,7 @@ class RolesController < ApplicationController
   end
 
   def update
-    byebug
+    #byebug
     if @user.update(user_params)
       redirect_to site_roles_path, notice: notice
     else

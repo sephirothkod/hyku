@@ -26,9 +26,7 @@ Hyrax.config do |config|
   # Specify a date you wish to start collecting Google Analytic statistics for.
   # config.analytic_start_date = DateTime.new(2014,9,10)
 
-  # Enables a link to the citations page for a generic_file.
-  # Default is false
-  # config.citations = false
+  config.ingest_queue_name = :ingest
 
   # Enables a link to the citations page for a generic_file.
   # Default is false
@@ -41,7 +39,7 @@ Hyrax.config do |config|
   # config.persistent_hostpath = 'http://localhost/files/'
 
   # If you have ffmpeg installed and want to transcode audio and video uncomment this line
-  # config.enable_ffmpeg = true
+  config.enable_ffmpeg = true
 
   # Hyrax uses NOIDs for files and collections instead of Fedora UUIDs
   # where NOID = 10-character string and UUID = 32-character string w/ hyphens

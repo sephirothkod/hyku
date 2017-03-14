@@ -98,7 +98,10 @@ end
 
 gem 'sidekiq'
 gem 'peek-sidekiq'
+gem 'sidekiq-failures'
 
 gem 'secure_headers'
 
 gem 'honeybadger', '~> 2.0'
+
+
